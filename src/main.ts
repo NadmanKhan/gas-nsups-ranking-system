@@ -4,7 +4,6 @@ import * as vj from './vjudge';
 import {
   getPercentileRankMap,
 } from './utilities';
-import { MediaFeature } from 'puppeteer';
 
 type Member = {
   name: string;
