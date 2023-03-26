@@ -5,8 +5,8 @@
   "main": "dist/bundle.js",
   "scripts": {
     "build": "npx webpack",
-    "push": "clasp push",
-    "build:push": "npm run build && npm run push"
+    "deploy": "clasp push",
+    "build:deploy": "npm run build && npm run deploy"
   },
   "author": "",
   "license": "ISC",
