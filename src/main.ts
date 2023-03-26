@@ -399,7 +399,7 @@ const writeSheet = () => {
           .setVerticalAlignment('top')
           .setBackground(
             [
-              COLOR.gray,
+              COLOR.dark_gray_1,
               COLOR.light_cyan_1,
               COLOR.light_cornflower_blue_1,
             ][index]
@@ -434,11 +434,11 @@ const writeSheet = () => {
           .setWrap(true)
           .setHorizontalAlignment('center')
           .setVerticalAlignment('top')
-          .setBackground(COLOR.light_gray_1)
+          .setBackground(COLOR.gray)
           .setFontWeight('bold');
         sheet.setColumnWidth(column, width);
         sheet.getRange(NUM_ROWS_FROZEN + 1, column, memberSummaries.length, 1)
-          .setBackground(COLOR.light_gray_2);
+          .setBackground(COLOR.light_gray_1);
         return column + 1;
       }, curColumn);
     
