@@ -6,7 +6,7 @@ import {
 export const OJ_NAME_ON_VJUDGE = 'CodeForces';
 const BASE_URL = 'https://codeforces.com/api';
 
-export const getMemberRating = (handles: string[]) => {
+export const getMaxRatingForHandles = (handles: string[]) => {
   return handles.reduce((accRating, handle) => {
     const url = `${BASE_URL}/user.rating?handle=${handle}`;
     const [json, ok] = attemptFetch(url, {

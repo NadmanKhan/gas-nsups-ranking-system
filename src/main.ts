@@ -5,6 +5,8 @@ import {
   getPercentileRankMap,
 } from './utilities';
 
+const NOW = new Date().getTime();
+
 type Member = {
   name: string;
   id: string;
@@ -37,8 +39,8 @@ const members = (() => {
 const ratingMap = (() => {
   return members.reduce((map, member) => {
     map.set(member.id, {
-      codeforces: cf.getMemberRating(member.handles.codeforces),
-      atcoder: ac.getMemberRating(member.handles.atcoder),
+      codeforces: cf.getMaxRatingForHandles(member.handles.codeforces),
+      atcoder: ac.getMaxRatingForHandles(member.handles.atcoder),
     });
     return map;
   }, new Map<string, { codeforces: number, atcoder: number }>());
@@ -47,9 +49,12 @@ const ratingMap = (() => {
 const submissionsMap = (() => {
   return members.reduce((map, member) => {
     map.set(member.id, {
-      codeforces: cf.getSubmissionsForHandles(member.handles.codeforces),
-      atcoder: ac.getSubmissionsForHandles(member.handles.atcoder),
-      vjudge: vj.get200AcceptedSubmissionsForHandles(member.handles.vjudge),
+      codeforces: cf.getSubmissionsForHandles(member.handles.codeforces)
+        .filter(submission => submission.timeInMs < NOW),
+      atcoder: ac.getSubmissionsForHandles(member.handles.atcoder)
+        .filter(submission => submission.timeInMs < NOW),
+      vjudge: vj.get200AcceptedSubmissionsForHandles(member.handles.vjudge)
+        .filter(submission => submission.timeInMs < NOW),
     });
     return map;
   }, new Map<string, {
@@ -87,7 +92,7 @@ const totalSolveCountMap = (() => {
 })();
 
 const solveCount90DaysMap = (() => {
-  const time90DaysBackInMs = new Date().getTime() - 90 * 24 * 60 * 60 * 1000;
+  const time90DaysBackInMs = NOW - 90 * 24 * 60 * 60 * 1000;
   return members.reduce((map, member) => {
     const solvedSofar = new Set<string>();
     const counts = new Array<number>(90).fill(0);
@@ -113,7 +118,7 @@ const solveCount90DaysMap = (() => {
 
         // [today, yesterday, ..., 89 days and 23:59:59.999... ago]
 
-        const daysAgo = Math.floor((new Date().getTime() - submission.timeInMs) /
+        const daysAgo = Math.floor((NOW - submission.timeInMs) /
           (24 * 60 * 60 * 1000));
 
         counts[daysAgo] += 1;
@@ -440,10 +445,10 @@ const writeSheet = () => {
           .setBackground(COLOR.light_gray_1);
         return column + 1;
       }, curColumn);
-    
+
     sheet.getRange(NUM_ROWS_FROZEN + 1, 5, memberSummaries.length, 1)
       .setHorizontalAlignment('center');
-    
+
     const gradientRuleRanges = [
       sheet.getRange(NUM_ROWS_FROZEN + 1, 4, memberSummaries.length, 1)
     ];

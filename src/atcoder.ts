@@ -20,7 +20,7 @@ const REGEX = {
     /<th class="no-break">Rating<\/th><td><span class=\S+>(\d+)<\/span>[\s\S]*?<\/td>/,
 } as const;
 
-export const getMemberRating = (handles: string[]) => {
+export const getMaxRatingForHandles = (handles: string[]) => {
   return handles.reduce((accRating, handle) => {
       const url = `${BASE_URL}/users/${handle}`;
       const [html, ok] = attemptFetch(url, {
