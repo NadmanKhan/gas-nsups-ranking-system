@@ -22,29 +22,29 @@ const REGEX = {
 
 export const getMaxRatingForHandles = (handles: string[]) => {
   return handles.reduce((accRating, handle) => {
-      const url = `${BASE_URL}/users/${handle}`;
-      const [html, ok] = attemptFetch(url, {
-        cacheExpirationInSeconds: 60 * 60 * 24,
-      });
-      if (!ok) return accRating;
+    const url = `${BASE_URL}/users/${handle}`;
+    const [html, ok] = attemptFetch(url, {
+      cacheExpirationInSeconds: 60 * 60 * 24,
+    });
+    if (!ok) return accRating;
 
-      /*
-        The rating part in the user's profile looks like this:
+    /*
+      The rating part in the user's profile looks like this:
 
-        ```
-        <tr><th class="no-break">Rating</th><td><span class='user-brown'>725</span>
-              </td></tr>
-        ```
-      */
-     
-      const matchArray = html.match(REGEX.userRating);
-     
-      if (matchArray === null) return accRating;
-     
-      const rating = matchArray[1];
+      ```
+      <tr><th class="no-break">Rating</th><td><span class='user-brown'>725</span>
+            </td></tr>
+      ```
+    */
 
-      return Math.max(accRating, parseInt(rating));
-    }, 0)
+    const matchArray = html.match(REGEX.userRating);
+
+    if (matchArray === null) return accRating;
+
+    const rating = matchArray[1];
+
+    return Math.max(accRating, parseInt(rating));
+  }, 0)
 };
 
 export const getContestsOrderedByTimeDesc = () => {
@@ -111,7 +111,7 @@ export const getContestsOrderedByTimeDesc = () => {
       })();
 
       const lengthInMs = (() => {
-        const [hours, minutes] = tdWithLengthInHHMM.split(':').map(parseInt);
+        const [hours, minutes] = tdWithLengthInHHMM.split(':').map(x => parseInt(x, 10));
         return hours * 60 * 60 * 1000 + minutes * 60 * 1000;
       })();
 
@@ -167,6 +167,7 @@ export const getSubmissionsForHandles = (handles: string[]) => {
     return submissions;
 
   }).map(submission => {
+
     return <Generic.Submission>{
       id: submission.id,
       handle: submission.user_id,
