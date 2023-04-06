@@ -102,7 +102,7 @@ export const getSubmissionsForHandles = (handles: string[]) => {
         ),
         contestId: submission.problem.contestId.toString(),
         isAccepted: submission.verdict ? submission.verdict === 'OK' : false,
-        isRated: submission.author.participantType === 'CONTESTANT'
+        isContesting: submission.author.participantType === 'CONTESTANT'
       });
   });
 }

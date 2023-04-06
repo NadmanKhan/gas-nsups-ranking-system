@@ -6,7 +6,7 @@ declare namespace Generic {
     timeInMs: number;
     problemGlobalId: string;
     contestId: string;
-    isRated: boolean;
+    isContesting: boolean;
     isAccepted: boolean;
   };
 

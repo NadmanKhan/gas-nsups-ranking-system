@@ -140,12 +140,12 @@ const hasParticipatedInContestsMap = (() => {
     };
     const cfContestWithRatedSolve = new Set(
       submissions.codeforces
-        .filter(sub => sub.isRated)
+        .filter(sub => sub.isContesting)
         .map(sub => sub.contestId)
     );
     const acContestsWithRatedSolve = new Set(
       submissions.atcoder
-        .filter(sub => sub.isRated)
+        .filter(sub => sub.isContesting)
         .map(sub => sub.contestId)
     );
     const cfContestsRatedForMember = cfContests.filter(contest =>
@@ -272,7 +272,7 @@ type RatingEligibilityTask = {
 
 const ratingEligibilityTasks = (() => {
   const sheet =
-    SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Rated Eligibility Tasks');
+    SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Contestant Eligibility Criteria');
   return sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn())
     .getValues()
     .map(row => <RatingEligibilityTask>{
@@ -390,7 +390,7 @@ const writeSheet = () => {
     ([
       ['Summary', 5],
       ['Rating Components', ratingComponents.length * 2],
-      ['Rated Eligibility Tasks', ratingEligibilityTasks.length],
+      ['Contestant Eligibility Criteria', ratingEligibilityTasks.length],
     ] as [string, number][])
       .reduce((column, [header, span], index) => {
         sheet.getRange(1, column, 1, span)
@@ -427,7 +427,7 @@ const writeSheet = () => {
       ['Name', 150],
       ['NSU ID', 80],
       ['Aggregate Rating', NUMERIC_CELL_WIDTH],
-      ['Rated Status', NUMERIC_CELL_WIDTH],
+      ['Is Contestant?', 35],
     ] as [string, number][])
       .reduce((column, [header, width]) => {
         sheet.getRange(2, column, 2, 1)
@@ -452,19 +452,6 @@ const writeSheet = () => {
     const gradientRuleRanges = [
       sheet.getRange(NUM_ROWS_FROZEN + 1, 4, memberSummaries.length, 1)
     ];
-
-    ([
-      ['rated', COLOR.light_green_2],
-      ['unrated', COLOR.light_red_2]
-    ] as [string, string][])
-      .forEach(([text, color]) => {
-        formatRules.push(
-          SpreadsheetApp.newConditionalFormatRule()
-            .whenTextEqualTo(text)
-            .setBackground(color)
-            .setRanges([sheet.getRange(NUM_ROWS_FROZEN + 1, 5, memberSummaries.length, 1)])
-        );
-      });
 
     curColumn = ratingComponents.reduce((column, component) => {
       sheet.getRange(2, column, 1, 2)
@@ -559,7 +546,7 @@ const writeSheet = () => {
           summary.name,
           summary.id,
           summary.aggregateRating,
-          summary.isRated ? 'rated' : 'unrated',
+          summary.isRated ? '✅' : '❌',
           ...summary.ratingComponents.map(component => [
             component.raw,
             component.normalized,

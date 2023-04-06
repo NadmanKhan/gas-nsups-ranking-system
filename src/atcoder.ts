@@ -175,7 +175,7 @@ export const getSubmissionsForHandles = (handles: string[]) => {
         OJ_NAME_ON_VJUDGE, submission.problem_id
       ),
       contestId: submission.contest_id,
-      isRated: isInContestTime(submission.contest_id, submission.epoch_second * 1000),
+      isContesting: isInContestTime(submission.contest_id, submission.epoch_second * 1000),
       isAccepted: submission.result === 'AC',
     };
   });
@@ -252,7 +252,7 @@ export const getSubmissionsForHandlesByContests = (
             problemGlobalId: makeProblemGlobalId(OJ_NAME_ON_VJUDGE, problemId),
             timeInMs,
             isAccepted,
-            isRated: isInContestTime(contestId, timeInMs),
+            isContesting: isInContestTime(contestId, timeInMs),
             contestId,
           });
         });

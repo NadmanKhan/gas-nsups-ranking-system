@@ -26,7 +26,7 @@ export const get200AcceptedSubmissionsForHandles = (handles: string[]) => {
           problemGlobalId: makeProblemGlobalId(submission.oj, submission.probNum),
           contestId: '_',
           isAccepted: submission.status === 'Accepted',
-          isRated: false,
+          isContesting: false,
         });
       })
   );
