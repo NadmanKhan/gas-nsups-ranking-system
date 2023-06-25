@@ -427,7 +427,7 @@ const writeSheet = () => {
       ['Name', 150],
       ['NSU ID', 80],
       ['Aggregate Rating', NUMERIC_CELL_WIDTH],
-      ['Is Contestant?', 35],
+      ['Eligibility', 35],
     ] as [string, number][])
       .reduce((column, [header, width]) => {
         sheet.getRange(2, column, 2, 1)
